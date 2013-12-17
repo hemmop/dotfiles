@@ -1,0 +1,10 @@
+[alias]
+	ca = commit --amend --reuse-message=HEAD
+	co = checkout
+	cp = cherry-pick
+	s = status
+	sg = log --graph --oneline
+	sg10 = log --graph --oneline -10
+	sg20 = log --graph --oneline -20
+[color]
+	ui = auto
