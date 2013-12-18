@@ -28,7 +28,7 @@ parse_git_branch() {
     branch=$(echo $branch | sed s/release/r/1)
   fi
 
-  PS1="${debian_chroot:+($debian_chroot)}\u@\h:\w${YELLOW}${branch}${DEFAULT}\$ "
+  PS1="${debian_chroot:+($debian_chroot)}\u@\h:\w\[${YELLOW}\]${branch}\[${DEFAULT}\]\$ "
 }
 
 PROMPT_COMMAND=parse_git_branch
