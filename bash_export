@@ -1,5 +1,4 @@
-export EDITOR=vim
-#export TERM=xterm-256color
+export EDITOR=$(which vim)
 export NAME="Per Carlson"
 export EMAIL="pelle@hemmop.com"
 export PBUILDFOLDER="/var/cache/pbuilder"
