@@ -1,34 +1,38 @@
-# Try loading git-sh-prompt from git-core
-if [ -f /usr/lib/git-core/git-sh-prompt ]; then
-  source /usr/lib/git-core/git-sh-prompt
-  export GIT_PS1_SHOWDIRTYSTATE=1
+# If __git_ps1 isn't defined
+if [[ 0 -eq $(declare -f -F __git_ps1 > /dev/null) ]]; then
+    # Try loading git-sh-prompt from git-core
+    if [ -f /usr/lib/git-core/git-sh-prompt ]; then
+	source /usr/lib/git-core/git-sh-prompt
+	export GIT_PS1_SHOWDIRTYSTATE=1
+    fi
 fi
 
 # Responsive Prompt
 parse_git_branch() {
-  local BLUE=$(tput setaf 4)
-  local GREEN=$(tput setaf 2)
-  local RED=$(tput setaf 1)
-  local YELLOW=$(tput setaf 3)
-  local WHITE=$(tput setaf 7)
+    local BLUE=$(tput setaf 4)
+    local GREEN=$(tput setaf 2)
+    local RED=$(tput setaf 1)
+    local YELLOW=$(tput setaf 3)
+    local WHITE=$(tput setaf 7)
 
-  local DEFAULT=$(tput sgr0)
+    local DEFAULT=$(tput sgr0)
 
-  if [[ 0 -eq $(declare -f -F __git_ps1 > /dev/null) ]]; then
-    branch=$(__git_ps1 "[%s]")
-  else
-    branch=$(git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\[\1\]/')
-  fi
+    if [[ 0 -eq $(declare -f -F __git_ps1 > /dev/null) ]]; then
+	branch=$(__git_ps1 "[%s]")
+    else
+	branch=$(git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\[\1\]/')
+    fi
 
-  if [[ $(tput cols) -lt 110 ]]; then
-    branch=$(echo $branch | sed s/develop/d/1)
-    branch=$(echo $branch | sed s/hotfix/h/1)
-    branch=$(echo $branch | sed s/feature/f/1)
-    branch=$(echo $branch | sed s/master/m/1)
-    branch=$(echo $branch | sed s/release/r/1)
-  fi
+    # Shorten branch name on narrow terminals
+    if [[ $(tput cols) -lt 110 ]]; then
+	branch=$(echo $branch | sed s/develop/d/1)
+	branch=$(echo $branch | sed s/hotfix/h/1)
+	branch=$(echo $branch | sed s/feature/f/1)
+	branch=$(echo $branch | sed s/master/m/1)
+	branch=$(echo $branch | sed s/release/r/1)
+    fi
 
-  PS1="${debian_chroot:+($debian_chroot)}\u@\h:\w\[${YELLOW}\]${branch}\[${DEFAULT}\]\$ "
+    PS1="${debian_chroot:+($debian_chroot)}\u@\h:\w\[${YELLOW}\]${branch}\[${DEFAULT}\]\$ "
 }
 
 PROMPT_COMMAND=parse_git_branch
