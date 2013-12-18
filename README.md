@@ -20,27 +20,16 @@ this _.dotfiles_ directory in the home directory.
 
 ## Bash
 
-The bash files are split in two files: _bash_aliases_ and _bash_local_
+The bash files are split into three separate files. The _bash_aliases_
+file will load the other two (_bash_exports_ and _bash_prompt_).
 
 ### Usage
 
-bash_alias:
+bash_aliases:
 
 ```sh
 ln -s $HOME/.dotfiles/bash_aliases $HOME/.bash_aliases
 ```
-
-bash_local:
-
-```sh
-cat >> $HOME/.bashrc
-
-# Load bash_local from dotfiles
-[[ -e $HOME/.dotfiles/bash_local ]] && source $HOME/.dotfiles/bash_local
-^D
-```
-
-Note: ^D is not the literal text ^D, but Ctrl-D entered on the keyboard
 
 ## Git
 
