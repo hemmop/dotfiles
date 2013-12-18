@@ -6,13 +6,13 @@ fi
 
 # Responsive Prompt
 parse_git_branch() {
-  local BLUE="\[\033[1;34m\]"
-  local GREEN="\[\033[1;32m\]"
-  local RED="\[\033[1;31m\]"
-  local YELLOW="\[\033[1;33m\]"
-  local WHITE="\[\033[1;37m\]"
+  local BLUE=$(tput setaf 4)
+  local GREEN=$(tput setaf 2)
+  local RED=$(tput setaf 1)
+  local YELLOW=$(tput setaf 3)
+  local WHITE=$(tput setaf 7)
 
-  local DEFAULT="\[\033[0m\]"
+  local DEFAULT=$(tput sgr0)
 
   if [[ 0 -eq $(declare -f -F __git_ps1 > /dev/null) ]]; then
     branch=$(__git_ps1 "[%s]")
