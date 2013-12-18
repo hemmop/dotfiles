@@ -37,19 +37,17 @@ This is the central place for mostly aliases I use in everyday tasks.
 
 ### Usage
 
-```sh
-ln -s $HOME/.dotfiles/gitconfig $HOME/.gitconfig
+Include the file in the per-user git-config file with an include statement.
+
+Example:
+
+```ini
+[include]
+  path = ~/.dotfiles/gitconfig
+
+; Other statements, for example
+[user]
+  name = Sven Svensson
+  email = sven@example.com
 ```
-
-## Vim
-
-My Vim files is pulled from a different repository of mine, i.e.
-is a submodule to this repository.
-
-### Usage
-
-```sh
-ln -s $HOME/.dotfiles/vim/vimrc $HOME/.vimrc
-```
-
 
