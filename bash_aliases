@@ -4,8 +4,6 @@ alias ls='ls --color=auto'
 alias ll='ls -lF'
 alias la='ll -A'
 
-alias tn=telnet
-
 alias tr1='tree -L 1'
 alias tr2='tree -L 2'
 alias tr3='tree -L 3'
