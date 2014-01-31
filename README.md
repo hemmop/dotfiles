@@ -23,6 +23,9 @@ this _.dotfiles_ directory in the home directory.
 The bash files are split into three separate files. The _bash_aliases_
 file will load the other two (_bash_exports_ and _bash_prompt_).
 
+In addition it will prepend the _PERL5LIB_ environment variable with
+the lines found in the $HOME/.perl5lib file.
+
 ### Usage
 
 bash_aliases:
