@@ -24,7 +24,9 @@ The bash files are split into three separate files. The _bash_aliases_
 file will load the other two (_bash_exports_ and _bash_prompt_).
 
 In addition it will prepend the _PERL5LIB_ environment variable with
-the lines found in the $HOME/.perl5lib file.
+the lines found in the $HOME/.local/perl5lib file, and add any _bin/_ 
+directory to the path. Note that the lines should be the _root_ directory,
+i.e. the directory used when for example installing modules with cpanm.
 
 ### Usage
 
@@ -33,6 +35,8 @@ bash_aliases:
 ```sh
 ln -s $HOME/.dotfiles/bash_aliases $HOME/.bash_aliases
 ```
+
+In addition any $HOME/.local/bash_aliases will be sourced.
 
 ## Git
 
