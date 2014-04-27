@@ -58,3 +58,14 @@ Example:
   email = sven@example.com
 ```
 
+## cowbuilder
+
+A tailored _.pbuilderrc_ file which supports both building packages
+with _cowbuilder_, _cowbuilder-dist_, and _git-pbuilder_.
+
+### Usage
+
+```sh
+ln -s $HOME/.dotfiles/pbuilderrc $HOME/.pbuilderrc
+```
+

@@ -1,0 +1,91 @@
+# Codenames for Debian suites according to their alias. Update these when
+# needed.
+UNSTABLE_CODENAME="sid"
+TESTING_CODENAME="jessie"
+STABLE_CODENAME="wheezy"
+STABLE_BACKPORTS_SUITE="$STABLE_CODENAME-backports"
+
+# List of Debian suites.
+DEBIAN_SUITES=($UNSTABLE_CODENAME $TESTING_CODENAME $STABLE_CODENAME
+    "unstable" "testing" "stable")
+
+# List of Ubuntu suites. Update these when needed.
+UBUNTU_SUITES=("trusty" "precise")
+
+# Mirrors to use. Update these to your preferred mirror.
+DEBIAN_MIRROR="ftp.no.debian.org"
+UBUNTU_MIRROR="no.archive.ubuntu.com"
+
+# Optionally use the changelog of a package to determine the suite to use if
+# none set.
+if [ -z "${DIST}" ] && [ -r "debian/changelog" ]; then
+    DIST=$(dpkg-parsechangelog | awk '/^Distribution: / {print $2}')
+    # Use the unstable suite for certain suite values.
+    if $(echo "experimental UNRELEASED" | grep -q $DIST); then
+        DIST="$UNSTABLE_CODENAME"
+    fi
+    # Use the stable suite for stable-backports.
+    if $(echo "$STABLE_BACKPORTS_SUITE" | grep -q $DIST); then
+        DIST="$STABLE"
+    fi
+fi
+
+# Optionally set a default distribution if none is used. Note that you can set
+# your own default (i.e. ${DIST:="unstable"}).
+: ${DIST:="$(lsb_release --short --codename)"}
+
+# Optionally change Debian release states in $DIST to their names.
+case "$DIST" in
+    unstable)
+        DIST="$UNSTABLE_CODENAME"
+        ;;
+    testing)
+        DIST="$TESTING_CODENAME"
+        ;;
+    stable)
+        DIST="$STABLE_CODENAME"
+        ;;
+esac
+
+# Get the distributor name (in lowercase)
+: DISTRIBUTOR=$(lsb_release --id --short | tr '[:upper:]' '[:lower:]')
+
+# Optionally set the architecture to the host architecture if none set. Note
+# that you can set your own default (i.e. ${ARCH:="i386"}).
+: ${ARCH:="$(dpkg --print-architecture)"}
+
+# Set default PBUILDERFOLDER
+: ${PBUILDFOLDER:="/var/cache/pbuilder"}
+
+NAME="$DIST"
+if [ -n "${ARCH}" ]; then
+    NAME="$NAME-$ARCH"
+    DEBOOTSTRAPOPTS=("--arch" "$ARCH" "${DEBOOTSTRAPOPTS[@]}")
+fi
+
+BASETGZ="${PBUILDFOLDER}/$NAME-base.tgz"
+BASEPATH="${PBUILDFOLDER}/$NAME-base.cow"
+DISTRIBUTION="$DIST"
+BUILDRESULT="${PBUILDFOLDER}/${NAME}_result/"
+APTCACHE="${PBUILDFOLDER}/aptcache/${DISTRIBUTOR}/"
+BUILDPLACE="${PBUILDFOLDER}/build/"
+#HOOKDIR="${PBUILDFOLDER}/hook.d/"
+# BINDMOUNTS="/var/cache/archive"
+
+if $(echo ${DEBIAN_SUITES[@]} | grep -q $DIST); then
+    # Debian configuration
+    MIRRORSITE="http://$DEBIAN_MIRROR/debian/"
+    COMPONENTS="main contrib non-free"
+    DEBOOTSTRAPOPTS=("${DEBOOTSTRAPOPTS[@]}" "--keyring=/usr/share/keyrings/debian-archive-keyring.gpg")
+    #OTHERMIRROR="deb file:///var/cache/archive $DIST/"
+
+elif $(echo ${UBUNTU_SUITES[@]} | grep -q $DIST); then
+    # Ubuntu configuration
+    MIRRORSITE="http://$UBUNTU_MIRROR/ubuntu/"
+    COMPONENTS="main restricted universe multiverse"
+    DEBOOTSTRAPOPTS=("${DEBOOTSTRAPOPTS[@]}" "--keyring=/usr/share/keyrings/ubuntu-archive-keyring.gpg")
+    #OTHERMIRROR="deb file:///var/cache/archive $DIST/"
+else
+    echo "Unknown distribution: $DIST"
+    exit 1
+fi
