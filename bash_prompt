@@ -4,6 +4,9 @@ if [[ 0 -eq $(declare -f -F __git_ps1 > /dev/null) ]]; then
     if [ -f /usr/lib/git-core/git-sh-prompt ]; then
 	source /usr/lib/git-core/git-sh-prompt
 	export GIT_PS1_SHOWDIRTYSTATE=1
+    elif [ -f $HOME/.dotfiles/git-prompt.sh ]; then
+	source $HOME/.dotfiles/git-prompt.sh
+	export GIT_PS1_SHOWDIRTYSTATE=1
     fi
 fi
 
@@ -32,7 +35,7 @@ parse_git_branch() {
 	branch=$(echo $branch | sed s/release/r/1)
     fi
 
-    PS1="${debian_chroot:+($debian_chroot)}\u@\h:\w\[${YELLOW}\]${branch}\[${DEFAULT}\]\$ "
+    PS1="\u@\h:\w\[${YELLOW}\]${branch}\[${DEFAULT}\]\$ "
 }
 
 PROMPT_COMMAND=parse_git_branch

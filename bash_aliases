@@ -9,8 +9,8 @@ alias tr2='tree -L 2'
 alias tr3='tree -L 3'
 
 # If we have ack-grep, but not ack, alias ack to ack-grep
-ACK=$(which ack)
-ACKGREP=$(which ack-grep)
+ACK=$(which ack 2>/dev/null)
+ACKGREP=$(which ack-grep 2>/dev/null)
 if [ "x$ACKGREP" != "x" ] && [ "x$ACK" == "x" ]; then
   alias ack="$ACKGREP"
 fi
